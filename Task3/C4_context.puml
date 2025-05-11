@@ -1,0 +1,19 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(customer, "Клиент")
+System(ibs, "АБС банка")
+System(webbank, "Интернет-банк")
+System(website, "Сайт")
+System(sms, "Сервис СМС-уведомлений")
+System(backoffice, "Бэк-офис")
+System(callcenter, "Кол-центр")
+
+Rel(customer, website, "Заполняет заявку")
+Rel(customer, webbank, "Открывает депозит")
+Rel(webbank, sms, "Отправка СМС")
+Rel(webbank, backoffice, "Передаёт заявку")
+Rel(backoffice, ibs, "Подтверждает ставку")
+Rel(website, callcenter, "Передаёт заявку")
+Rel(callcenter, customer, "Обратный звонок")
+@enduml

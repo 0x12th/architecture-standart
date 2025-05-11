@@ -1,0 +1,32 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(customer, "Клиент")
+
+System_Boundary(webbank, "Интернет-банк") {
+  Container(ib_ui, "Web-интерфейс", "React", "Интерфейс клиента")
+  Container(ib_api, "API интернет-банка", "Java", "Обработка заявок и взаимодействие с backend")
+  ContainerDb(ib_db, "База данных интернет-банка", "MS SQL", "Хранение заявок и истории")
+}
+
+System_Boundary(ibs, "АБС") {
+  Container(ibs_core, "Ядро АБС", "Oracle", "Управление депозитами")
+  Container(ibs_files, "Модуль ставок (XLS)", "Файлы", "Загрузка и чтение ставок вручную")
+}
+
+System(website, "Сайт", "HTML + PHP", "Подача заявок от новых клиентов")
+System(callcenter, "Кол-центр", "CRM", "Обработка заявок с сайта и звонки")
+System(backoffice, "Бэк-офис", "Внутренний портал", "Обработка и подтверждение заявок")
+System(sms, "Сервис СМС-уведомлений", "Внутренний сервис", "Отправка подтверждений")
+
+Rel(customer, ib_ui, "Открытие депозита через")
+Rel(ib_ui, ib_api, "Вызов API", "REST/HTTPS")
+Rel(ib_api, ib_db, "Запись и чтение", "JDBC/MS SQL")
+Rel(ib_api, backoffice, "Передача заявки на депозит")
+Rel(backoffice, ibs_core, "Обработка депозита", "API/внутренний интерфейс")
+Rel(ibs_core, ibs_files, "Работа со ставками")
+Rel(ib_api, sms, "Отправка СМС")
+Rel(customer, website, "Заполнение формы")
+Rel(website, callcenter, "Передача заявки")
+Rel(callcenter, customer, "Звонок клиенту")
+@enduml
