@@ -1,0 +1,15 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+System_Boundary(ibs, "АБС") {
+  ContainerDb(stake_db, "БД ставок", "Oracle", "Хранит ставки по депозитам")
+  Container(admin_ui, "Админ-интерфейс ставок", "Web-интерфейс", "Позволяет экспортировать XLS-файлы")
+}
+
+System(callcenter, "Кол-центр")
+System_Ext(partner_cc, "Партнёрский кол-центр")
+
+Rel(admin_ui, stake_db, "Чтение ставок")
+Rel(callcenter, stake_db, "Чтение ставок (через View или копию)")
+Rel(admin_ui, partner_cc, "Экспорт XLS файла")
+@enduml
